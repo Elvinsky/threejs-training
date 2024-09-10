@@ -5,6 +5,7 @@ import { createBall } from '../../objects/ball';
 import { createRenderer } from './renderer';
 import { collision } from '../../objects/global/collision';
 import { camera } from '../../objects/global/camera';
+import { createSnowflake } from '../../objects/snowflakes';
 
 export const GameScreen = () => {
   const app = document.getElementById('app')!;
@@ -15,16 +16,18 @@ export const GameScreen = () => {
   const scene = createScene();
   const player = createPlayer();
   const ball = createBall();
+  const snowflake = createSnowflake();
   const tempCamera = camera.clone();
   tempCamera.far = 2;
 
   player.group.add(ball.group);
-  scene.add(player.group, collision.group);
+  scene.add(player.group, collision.group, snowflake.points);
 
   const animate = (time: number) => {
     const direction = keyboard.directionVector;
 
     player.render(direction, time);
+    snowflake.render();
     ball.update(player);
 
     renderer.render(scene, camera);
